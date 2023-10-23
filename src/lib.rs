@@ -28,7 +28,7 @@ use lazy_regex::*;
 /// # Example
 /// 
 /// ```
-/// use as3_parser::util::LateSubstitution;
+/// use late_substitution::LateSubstitution;
 /// use maplit::hashmap;
 /// let user_string: String = "some user string: {id}".into();
 /// assert_eq!("some user string: x", user_string.late_substitution(hashmap!{"id".into() => "x".into()}));

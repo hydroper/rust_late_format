@@ -1,11 +1,11 @@
 [package]
-name = "late_substitution"
-version = "1.0.1"
+name = "late_format"
+version = "1.0.0"
 edition = "2021"
 authors = ["hydroper <matheusdiasdesouzads@gmail.com>"]
-repository = "https://github.com/hydroper/rust_late_substitution"
+repository = "https://github.com/hydroper/rust_late_format"
 license = "MIT OR Apache-2.0"
-description = "Late substitution of string parameters"
+description = "Late formatting of string parameters"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

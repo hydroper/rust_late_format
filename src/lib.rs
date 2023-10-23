@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 use lazy_regex::*;
 
-/// The `LateSubstitution` trait allows substituting string parameters
+/// The `LateFormat` trait allows substituting string parameters
 /// of arbitrary name that is computed at runtime.
 ///
-/// `LateSubstitution` is implemented for the `String` and `&str` types by default.
+/// `LateFormat` is implemented for the `String` and `&str` types by default.
 ///
 /// The substitution syntax accepts curly braces forms:
 /// 
@@ -28,21 +28,21 @@ use lazy_regex::*;
 /// # Example
 /// 
 /// ```
-/// use late_substitution::LateSubstitution;
+/// use late_format::LateFormat;
 /// use maplit::hashmap;
 /// let user_string: String = "some user string: {id}".into();
-/// assert_eq!("some user string: x", user_string.late_substitution(hashmap!{"id".into() => "x".into()}));
+/// assert_eq!("some user string: x", user_string.late_format(hashmap!{"id".into() => "x".into()}));
 /// 
 /// // if a string contains curly braces, they must be escaped.
 /// let escaped: String = r#"{"{"}"#.into();
 /// ```
 ///
-pub trait LateSubstitution {
-    fn late_substitution(&self, arguments: HashMap<String, String>) -> String;
+pub trait LateFormat {
+    fn late_format(&self, arguments: HashMap<String, String>) -> String;
 }
 
-impl LateSubstitution for &str {
-    fn late_substitution(&self, arguments: HashMap<String, String>) -> String {
+impl LateFormat for &str {
+    fn late_format(&self, arguments: HashMap<String, String>) -> String {
         regex_replace_all!(
             r#"(?x)
             \{\s*(
@@ -61,9 +61,9 @@ impl LateSubstitution for &str {
     }
 }
 
-impl LateSubstitution for String {
-    fn late_substitution(&self, arguments: HashMap<String, String>) -> String {
-        self.as_str().late_substitution(arguments)
+impl LateFormat for String {
+    fn late_format(&self, arguments: HashMap<String, String>) -> String {
+        self.as_str().late_format(arguments)
     }
 }
 
@@ -73,14 +73,14 @@ mod test {
     use maplit::hashmap;
 
     #[test]
-    fn substitution() {
+    fn formatting() {
         let user_string: String = "some user string: {id}".into();
-        assert_eq!("some user string: x", user_string.late_substitution(hashmap!{"id".into() => "x".into()}));
+        assert_eq!("some user string: x", user_string.late_format(hashmap!{"id".into() => "x".into()}));
         let user_string: String = r#"some user string: {"id"}"#.into();
-        assert_eq!("some user string: id", user_string.late_substitution(hashmap!{"id".into() => "x".into()}));
+        assert_eq!("some user string: id", user_string.late_format(hashmap!{"id".into() => "x".into()}));
         let user_string: String = r#"some user string: {  "id"  }"#.into();
-        assert_eq!("some user string: id", user_string.late_substitution(hashmap!{"id".into() => "x".into()}));
+        assert_eq!("some user string: id", user_string.late_format(hashmap!{"id".into() => "x".into()}));
         let user_string: String = "some user string: {id}".into();
-        assert_eq!("some user string: None", user_string.late_substitution(hashmap!{}));
+        assert_eq!("some user string: None", user_string.late_format(hashmap!{}));
     }
 }
